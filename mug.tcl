@@ -1,6 +1,7 @@
 #!/usr/bin/env tclsh
 
 package require cmdline
+package require http
 
 # Args are defined like {name comparator source version}
 
@@ -19,6 +20,37 @@ proc provide_autoloader {path} {
     close $file_id
 }
 
+proc get_arch {} {
+    set sys_os $::tcl_platform(os)
+    set sys_machine $::tcl_platform(machine)
+
+    if {$sys_os == "Darwin"} {
+        set os "macosx"
+    } elseif {$os == "Linux"} {
+        set os "linux"
+    } else {
+        set os "unknown"
+    }
+    
+    # TODO: Make this support non-x86 platforms
+    if {$sys_machine == "x86_64"} {
+        set machine "x86-64"
+    } else {
+        set machine "x86"
+    } else {
+        set machine "unknown"
+    }
+    return "$os $machine"
+}
+
+# Get a URL really simply
+proc get_page {url} {
+    set token [::http::geturl $url]
+    set data [::http::data $token]
+    ::http::cleanup $token          
+    return $data
+}
+
 # From a Teapot URL, extract the meaningful data
 proc extract_teapot_string {teapot_string} {
     set start [string first {[[TPM[[} $teapot_string]
@@ -26,23 +58,21 @@ proc extract_teapot_string {teapot_string} {
     return [string range $teapot_string [expr {$start + 7}] [expr {$end - 1}]]
 }
 
-proc get_arch {} {
-    set sys_os $::tcl_platform(os)
-    set sys_machine $::tcl_platform(machine)
+proc get_teapot_info {url} {
+    set data [get_page $url]
+    return [extract_teapot_string $data]
+}
 
-    if {$sys_os == "Darwin"} {
-        # We should probably try and get the x64 version if we need it
-        return "macosx-universal"
-    } elseif {$os == "Linux"} {
+proc find_teapot_package {teapot_url my_package_name} {
+    set packages [get_teapot_info $teapot_url/index]
+
+    foreach {package_name} $packages {
+        if {$package_name == $my_package_name} {
+            return $package_name
+        }
     }
-    
-    # TODO: Make this support non-x86 platforms
-    if {$sys_machine == "x86_64"} {
-        return "linux-glibc2.3-x86_64"
-    } else {
-        return "linux-glibc2.3-ix86"
-    }
-    error "Unknown architecture $os $machine"
+
+    return 0
 }
 
 proc install {args} {
@@ -56,6 +86,7 @@ proc main {args} {
     parray params
     puts $args
     provide_autoloader [pwd]
+    puts [find_teapot_package "http://teapot.activestate.com/" "Itcl"]
 }
 
 main $::argv
