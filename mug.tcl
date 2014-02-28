@@ -64,11 +64,11 @@ proc get_teapot_info {url} {
 }
 
 proc find_teapot_package {teapot_url my_package_name} {
-    set packages [get_teapot_info $teapot_url/index]
+    set packages [get_teapot_info $teapot_url/package/list]
 
-    foreach {package_name} $packages {
-        if {$package_name == $my_package_name} {
-            return $package_name
+    foreach {package_tuple} $packages {
+        if {[lindex $package_tuple 1] == $my_package_name} {
+            return $package_tuple
         }
     }
 
@@ -83,8 +83,8 @@ proc main {args} {
         {install.arg "" "Install the application"}
     }
     array set params [::cmdline::getoptions args $options]
-    parray params
-    puts $args
+    #parray params
+    #puts $args
     provide_autoloader [pwd]
     puts [find_teapot_package "http://teapot.activestate.com/" "Itcl"]
 }
