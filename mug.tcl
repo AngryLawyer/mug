@@ -3,6 +3,24 @@
 package require cmdline
 package require http
 
+proc map {lambdaExpression list} {
+    set res {}
+    foreach element $list {
+        lappend res [apply $lambdaExpression $element]
+    }
+    return $res
+}
+
+proc filter {lambdaExpression list} {
+    set res {}
+    foreach element $list {
+        if {[apply $lambdaExpression $element] == 1} {
+            lappend res $element
+        }
+    }
+    return $res
+}
+
 # Args are defined like {name comparator source version}
 
 # Writes a sourceable script for using local packages
@@ -63,16 +81,38 @@ proc get_teapot_info {url} {
     return [extract_teapot_string $data]
 }
 
-proc find_teapot_package {teapot_url my_package_name} {
+proc match_version {available target} {
+    #FIXME: Make it match on patterns
+    if {$target == "any"} {
+        return 1
+    }
+    return [expr {$target == $available}]
+}
+
+proc pick_newest {packages} {
+    #FIXME: Make it do something
+    return [lindex $packages 0]
+}
+
+proc match_platform {available target} {
+    #FIXME: Make it split open our version tuple
+    return [expr {$available == $target}]
+}
+
+proc find_teapot_package {teapot_url package_name {version "any"} {platform "tcl"}} {
+    # Find the package in our packages list
     set packages [get_teapot_info $teapot_url/package/list]
 
-    foreach {package_tuple} $packages {
-        if {[lindex $package_tuple 1] == $my_package_name} {
-            return $package_tuple
+    set named_packages [filter {package_tuple {
+        upvar 2 package_name package_name version version platform platform
+        if {[lindex $package_tuple 1] == $package_name &&
+            [match_version [lindex $package_tuple 2] $version] &&
+            [match_platform [lindex $package_tuple 3] $platform]} {
+            return 1
         }
-    }
+    }} $packages]
 
-    return 0
+    return [pick_newest $named_packages]
 }
 
 proc install {args} {
@@ -86,7 +126,7 @@ proc main {args} {
     #parray params
     #puts $args
     provide_autoloader [pwd]
-    puts [find_teapot_package "http://teapot.activestate.com/" "Itcl"]
+    puts [find_teapot_package "http://teapot.activestate.com/" "base64" "2.4.2"]
 }
 
 main $::argv
