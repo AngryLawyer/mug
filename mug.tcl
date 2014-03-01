@@ -138,7 +138,7 @@ proc match_version {available target} {
     if {$operator == "<="} {
         foreach version_part $exploded_version available_part $exploded_available {
             if {$version_part == {}} {
-                return 1
+                return 0
             } elseif {$available_part > $version_part} {
                 return 0
             } elseif {$available_part < $version_part} {
@@ -151,7 +151,7 @@ proc match_version {available target} {
     if {$operator == "<"} {
         foreach version_part $exploded_version available_part $exploded_available {
             if {$version_part == {}} {
-                return 1
+                return 0
             } elseif {$available_part < $version_part} {
                 return 0
             } elseif {$available_part > $version_part} {
