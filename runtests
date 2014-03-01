@@ -1,4 +1,2 @@
 #!/usr/bin/env bash
-cd tests
-tclsh all.tcl
-cd -
+cd tests && tclsh all.tcl && cd -
