@@ -1,6 +1,5 @@
 #!/usr/bin/env tclsh
 
-package require cmdline
 package require http
 
 proc map {lambdaExpression list} {
@@ -201,10 +200,6 @@ proc install {args} {
 }
 
 proc main {args} {
-    set options {
-        {install.arg "" "Install the application"}
-    }
-    array set params [::cmdline::getoptions args $options]
     #puts [match_version "3.1.4" [parse_version_pattern ">1"]]
     #provide_autoloader [pwd]
     #puts [find_teapot_package "http://teapot.activestate.com/" "base64" "2.4.2"]
