@@ -111,9 +111,11 @@ proc match_version {available target} {
 
     if {$operator == ">="} {
         foreach version_part $exploded_version available_part $exploded_available {
-            if {$exploded_version < $available_part} {
+            if {$version_part == {}} {
+                return 1
+            } elseif {$available_part < $version_part} {
                 return 0
-            } elseif {$exploded_version > $available_part} {
+            } elseif {$available_part > $version_part} {
                 return 1
             }
         }
@@ -122,9 +124,11 @@ proc match_version {available target} {
 
     if {$operator == ">"} {
         foreach version_part $exploded_version available_part $exploded_available {
-            if {$exploded_version < $available_part} {
+            if {$version_part == {}} {
+                return 1
+            } elseif {$available_part < $version_part} {
                 return 0
-            } elseif {$exploded_version > $available_part} {
+            } elseif {$available_part > $version_part} {
                 return 1
             }
         }
@@ -133,9 +137,11 @@ proc match_version {available target} {
 
     if {$operator == "<="} {
         foreach version_part $exploded_version available_part $exploded_available {
-            if {$exploded_version > $available_part} {
+            if {$version_part == {}} {
+                return 1
+            } elseif {$available_part > $version_part} {
                 return 0
-            } elseif {$exploded_version < $available_part} {
+            } elseif {$available_part < $version_part} {
                 return 1
             }
         }
@@ -144,14 +150,17 @@ proc match_version {available target} {
 
     if {$operator == "<"} {
         foreach version_part $exploded_version available_part $exploded_available {
-            if {$exploded_version > $available_part} {
+            if {$version_part == {}} {
+                return 1
+            } elseif {$available_part < $version_part} {
                 return 0
-            } elseif {$exploded_version < $available_part} {
+            } elseif {$available_part > $version_part} {
                 return 1
             }
         }
         return 0
     }
+
 }
 
 proc pick_newest {packages} {
