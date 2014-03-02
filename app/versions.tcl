@@ -94,9 +94,9 @@ namespace eval ::mug::versions {
             foreach version_part $exploded_version available_part $exploded_available {
                 if {$version_part == {}} {
                     return 0
-                } elseif {$available_part < $version_part} {
-                    return 0
                 } elseif {$available_part > $version_part} {
+                    return 0
+                } elseif {$available_part < $version_part} {
                     return 1
                 }
             }
