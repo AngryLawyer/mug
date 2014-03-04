@@ -39,29 +39,6 @@ namespace eval ::mug {
         close $file_id
     }
 
-    proc get_arch {} {
-        set sys_os $::tcl_platform(os)
-        set sys_machine $::tcl_platform(machine)
-
-        if {$sys_os == "Darwin"} {
-            set os "macosx"
-        } elseif {$os == "Linux"} {
-            set os "linux"
-        } else {
-            set os "unknown"
-        }
-        
-        # TODO: Make this support non-x86 platforms
-        if {$sys_machine == "x86_64"} {
-            set machine "x86-64"
-        } else {
-            set machine "x86"
-        } else {
-            set machine "unknown"
-        }
-        return "$os $machine"
-    }
-
     # Get a URL really simply
     proc get_page {url} {
         set token [::http::geturl $url]
@@ -80,11 +57,6 @@ namespace eval ::mug {
     proc get_teapot_info {url} {
         set data [get_page $url]
         return [extract_teapot_string $data]
-    }
-
-    proc match_platform {available target} {
-        #FIXME: Make it split open our version tuple
-        return [expr {$available == $target}]
     }
 
 
