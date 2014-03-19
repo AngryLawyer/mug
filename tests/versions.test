@@ -11,10 +11,16 @@ test parse_version_pattern {
 } -result {any}
 
 test parse_version_pattern {
-    == should be a valid choice
+    empty should be recast as equals 
 } -body {
-    return [::mug::versions::parse_version_pattern "==123"]
-} -result {== 123}
+    return [::mug::versions::parse_version_pattern "123"] 
+} -result {= 123}
+
+test parse_version_pattern {
+    = should be a valid choice
+} -body {
+    return [::mug::versions::parse_version_pattern "=123"] 
+} -result {= 123}
 
 test parse_version_pattern {
     ~ should be a valid choice
@@ -46,14 +52,14 @@ test parse_version_pattern {
     return [::mug::versions::parse_version_pattern ">123"]
 } -result {> 123}
 
-test == {
-    Double equals should perform exact matches
+test = {
+    Equals should perform exact matches
 } -body {
-    return "[::mug::versions::match_version "1.2.3" "== 1.2.3"] [::mug::versions::match_version "1.2.3" "== 1.2"]"
-} -result {1 0}
+    return "[::mug::versions::match_version "1.2.3" "= 1.2.3"] [::mug::versions::match_version "1.2.3" "= 1.2"] [::mug::versions::match_version "2" "= 2"]"
+} -result {1 0 1}
 
-test == {
-    Approx equals should perform loose matches 
+test ~ {
+    Approx equals should perform loose matches (startswith) 
 } -body {
     set first [::mug::versions::match_version "1.2.3" "~ 1.2.3"] 
     set second [::mug::versions::match_version "1.2.3" "~ 1.2"] 

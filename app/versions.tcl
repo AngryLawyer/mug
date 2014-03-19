@@ -8,10 +8,12 @@ namespace eval ::mug::versions {
 
         set strlen [string length $pattern]
 
-        if {[string first "==" $pattern] == 0 || [string first ">=" $pattern] == 0 || [string first "<=" $pattern] == 0} { 
+        if {[string first ">=" $pattern] == 0 || [string first "<=" $pattern] == 0} { 
             return "[string range $pattern 0 1] [string trim [string range $pattern 2 $strlen]]"
-        } elseif {[string first ">" $pattern] == 0 || [string first "<" $pattern] == 0 || [string first "~" $pattern] == 0} {
+        } elseif {[string first "=" $pattern] == 0 || [string first ">" $pattern] == 0 || [string first "<" $pattern] == 0 || [string first "~" $pattern] == 0} {
             return "[string range $pattern 0 0] [string trim [string range $pattern 1 $strlen]]"
+        } elseif {[string is digit [lindex [split $pattern "."] 0]] == 1} {
+            return "= $pattern"
         } else {
             error "Invalid pattern $pattern"
         }
@@ -31,7 +33,7 @@ namespace eval ::mug::versions {
         set operator [lindex $target 0]
         set version [lindex $target 1]
 
-        if {$operator == "=="} {
+        if {$operator == "="} {
             return [expr {$version == $available}]
         } 
 
