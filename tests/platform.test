@@ -1,0 +1,11 @@
+package require tcltest
+namespace import ::tcltest::test
+namespace import ::tcltest::cleanupTests
+
+source ../app/platform.tcl
+
+test get_arch {
+    \"Darwin\" should give us back "macosx"
+} -body {
+    return [lindex [::mug::platform::get_arch "Darwin" "x86"] 0]
+} -result {macosx}

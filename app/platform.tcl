@@ -1,18 +1,18 @@
 namespace eval ::mug::platform {
-    namespace export
+    namespace expor match_platformt
 
     proc match_platform {available target} {
         #FIXME: Make it split open our version tuple
         return [expr {$available == $target}]
     }
 
-    proc get_arch {} {
-        set sys_os $::tcl_platform(os)
-        set sys_machine $::tcl_platform(machine)
+    proc get_arch {sys_os sys_machine} {
+        #set sys_os $::tcl_platform(os)
+        #set sys_machine $::tcl_platform(machine)
 
         if {$sys_os == "Darwin"} {
             set os "macosx"
-        } elseif {$os == "Linux"} {
+        } elseif {$sys_os == "Linux"} {
             set os "linux"
         } else {
             set os "unknown"
@@ -21,7 +21,7 @@ namespace eval ::mug::platform {
         # TODO: Make this support non-x86 platforms
         if {$sys_machine == "x86_64"} {
             set machine "x86-64"
-        } else {
+        } elseif {$sys_machine == "x86"} {
             set machine "x86"
         } else {
             set machine "unknown"
