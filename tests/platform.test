@@ -9,3 +9,21 @@ test get_arch {
 } -body {
     return [lindex [::mug::platform::get_arch "Darwin" "x86"] 0]
 } -result {macosx}
+
+test get_arch {
+    \"Linux\" should give us back "linux"
+} -body {
+    return [lindex [::mug::platform::get_arch "Linux" "x86"] 0]
+} -result {linux}
+
+test get_arch {
+    \"x86_64\" should give us back "x86-64"
+} -body {
+    return [lindex [::mug::platform::get_arch "Linux" "x86_64"] 1]
+} -result {x86-64}
+
+test get_arch {
+    \"x86\" should give us back "x86"
+} -body {
+    return [lindex [::mug::platform::get_arch "Linux" "x86"] 1]
+} -result {x86}

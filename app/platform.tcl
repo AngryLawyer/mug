@@ -1,5 +1,5 @@
 namespace eval ::mug::platform {
-    namespace expor match_platformt
+    namespace expor match_platform
 
     proc match_platform {available target} {
         #FIXME: Make it split open our version tuple
