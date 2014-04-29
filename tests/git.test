@@ -3,3 +3,45 @@ namespace import ::tcltest::test
 namespace import ::tcltest::cleanupTests
 
 source ../app/git.tcl
+
+test is_git_url {
+    \"git:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    \"git+http:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git+http://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    \"git+https:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git+https://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    \"git+rsync:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git+rsync://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    \"git+ftp:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git+ftp://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    \"git+ssh:\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "ssh+ftp://blahbla.com"]
+} -result {1}
+
+test is_git_url {
+    Anything else is not a Git url
+} -body {
+    return [::mug::git::is_git_url "http://blahbla.com"]
+} -result {0}
