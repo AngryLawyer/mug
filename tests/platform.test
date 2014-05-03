@@ -27,3 +27,5 @@ test get_arch {
 } -body {
     return [lindex [::mug::platform::get_arch "Linux" "x86"] 1]
 } -result {x86}
+
+cleanupTests
