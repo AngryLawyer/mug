@@ -205,13 +205,25 @@ proc find_teapot_package {teapot_url package_name {version "any"} {platform "tcl
     return [pick_newest $named_packages]
 }
 
-proc install {args} {
+proc install {argv} {
+    puts $argv
 }
 
 proc main {args} {
+    puts $args
+    set first_arg [lindex $args 1]
+
+    if {$first_arg != {}} {
+        puts $first_arg
+        switch $first_arg {
+            {install} { install [lrange $args 2 end] } 
+        }
+    } else {
+        puts "Mug - a Tcl package manager"
+    }
     #puts [match_version "3.1.4" [parse_version_pattern ">1"]]
     #provide_autoloader [pwd]
     #puts [find_teapot_package "http://teapot.activestate.com/" "base64" "2.4.2"]
 }
 
-#main $::argv
+main $::argv0 {*}$::argv
