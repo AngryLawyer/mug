@@ -214,7 +214,6 @@ proc main {args} {
     set first_arg [lindex $args 1]
 
     if {$first_arg != {}} {
-        puts $first_arg
         switch $first_arg {
             {install} { install [lrange $args 2 end] } 
         }
