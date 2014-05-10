@@ -2,6 +2,8 @@
 
 package require http
 
+source app/install.tcl
+
 proc map {lambdaExpression list} {
     set res {}
     foreach element $list {
@@ -205,9 +207,6 @@ proc find_teapot_package {teapot_url package_name {version "any"} {platform "tcl
     return [pick_newest $named_packages]
 }
 
-proc install {argv} {
-    puts $argv
-}
 
 proc main {args} {
     puts $args
@@ -215,7 +214,7 @@ proc main {args} {
 
     if {$first_arg != {}} {
         switch $first_arg {
-            {install} { install [lrange $args 2 end] } 
+            {install} { ::mug::install::install [lrange $args 2 end] } 
         }
     } else {
         puts "Mug - a Tcl package manager"
