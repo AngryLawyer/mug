@@ -25,5 +25,10 @@ namespace eval ::mug::git {
     }
 
     proc get_repo_tag {url} {
+        set hash_pos [string last # $url]
+        if {$hash_pos == -1} {
+            return {}
+        }
+        return [string range $url [expr $hash_pos + 1] end]
     }
 }
