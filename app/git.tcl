@@ -1,5 +1,5 @@
 namespace eval ::mug::git {
-    namespace export is_git_url
+    namespace export is_git_url get_repo_name get_repo_url get_repo_tag
 
     proc is_git_url {url} {
         set VALID_PREFIXES {
@@ -16,5 +16,14 @@ namespace eval ::mug::git {
             return 1
         }
         return 0
+    }
+
+    proc get_repo_name {url} {
+    }
+
+    proc get_repo_url {url} {
+    }
+
+    proc get_repo_tag {url} {
     }
 }

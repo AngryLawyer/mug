@@ -1,5 +1,7 @@
+source app/git.tcl
+
 namespace eval ::mug::install {
-    namespace export install
+    namespace export install install_directory
 
     proc install {items} {
         # Do we have any items?
@@ -13,6 +15,14 @@ namespace eval ::mug::install {
     }
 
     proc install_item {item} {
-        puts $item
+        if {[::mug::git::is_git_url $item] == 1} {
+            puts "$item is a Git repo"
+        } else {
+            puts "$item is not a Git repo"
+        }
+    }
+
+    proc install_directory {} {
+        return "mug_packages"
     }
 }

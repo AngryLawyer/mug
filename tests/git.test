@@ -46,4 +46,34 @@ test is_git_url {
     return [::mug::git::is_git_url "http://blahbla.com"]
 } -result {0}
 
+test get_repo_url {
+    We should be able to extract sensible URLs out of a git path
+} -body {
+    return [::mug::git::get_repo_url "git+https://github.com/AngryLawyer/mug.git#12345"]
+} -result {https://github.com/AngryLawyer/mug.git}
+
+test get_repo_tag {
+    We should be able to extract a tag from a repo url
+} -body {
+    return [::mug::git::get_repo_tag "git+https://github.com/AngryLawyer/mug.git#12345"]
+} -result {12345}
+
+test get_repo_tag {
+    We shouldn't explode if there's no tag
+} -body {
+    return [::mug::git::get_repo_tag "git+https://github.com/AngryLawyer/mug.git"]
+} -result {}
+
+test get_repo_name {
+    Should be able to extract a repo name from a url
+} -body {
+    return [::mug::git::get_repo_name "https://github.com/AngryLawyer/mug.git"]
+} -result {mug}
+
+test get_repo_name {
+    Should be able to extract a repo name from an ssh url and additional gumpf
+} -body {
+    return [::mug::git::get_repo_name "git@github.com:AngryLawyer/mug.git"]
+} -result {mug}
+
 cleanupTests
