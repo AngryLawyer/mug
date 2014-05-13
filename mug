@@ -2,7 +2,7 @@
 
 package require http
 
-source app/install.tcl
+source [file join [file dirname [info script]] app/install.tcl]
 
 proc map {lambdaExpression list} {
     set res {}
