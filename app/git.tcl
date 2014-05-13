@@ -19,9 +19,30 @@ namespace eval ::mug::git {
     }
 
     proc get_repo_name {url} {
+        set last_slash [string last "/" $url]
+        set git_extension [string first ".git" $url $last_slash]
+        if {$last_slash != -1 && $git_extension != -1} {
+            return [string range $url [expr $last_slash + 1] [expr $git_extension - 1]]
+        } else {
+            return {}
+        }
     }
 
     proc get_repo_url {url} {
+        set git_prefix [string first "git+" $url]
+        if {$git_prefix == 0} {
+            set start_pos 4
+        } else {
+            set start_pos 0
+        }
+
+        set hash_pos [string last # $url]
+        if {$hash_pos != -1} {
+            set end_pos [expr $hash_pos - 1]
+        } else {
+            set end_pos end
+        }
+        return [string range $url $start_pos $end_pos]
     }
 
     proc get_repo_tag {url} {
