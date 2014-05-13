@@ -1,5 +1,5 @@
 namespace eval ::mug::git {
-    namespace export is_git_url get_repo_name get_repo_url get_repo_tag
+    namespace export is_git_url get_repo_name get_repo_url get_repo_tag install
 
     proc is_git_url {url} {
         set VALID_PREFIXES {
@@ -51,5 +51,22 @@ namespace eval ::mug::git {
             return {}
         }
         return [string range $url [expr $hash_pos + 1] end]
+    }
+
+    proc check_git_exists {} {
+        #TODO: This needs to be platform independent
+        set result [exec which git]
+        if {$result != {}} {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    proc install {url} {
+        if {![check_git_exists]} {
+            puts "I can't find git!"
+            return
+        }
     }
 }

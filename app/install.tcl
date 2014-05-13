@@ -17,7 +17,7 @@ namespace eval ::mug::install {
 
     proc install_item {item} {
         if {[::mug::git::is_git_url $item] == 1} {
-            puts "$item is a Git repo"
+            ::mug::git::install $item
         } else {
             puts "$item is not a Git repo"
         }
