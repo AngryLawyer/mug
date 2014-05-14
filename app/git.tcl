@@ -86,9 +86,8 @@ namespace eval ::mug::git {
         set path "mug_packages/$repo_name"
         if {[file exists $path]} {
             if {[file isdirectory $path]} {
-                set result [exec cd $path && git remote -v]
+                set result [exec git --git-dir=./$path/.git remote -v]
                 puts $result
-                puts [exec pwd]
                 return 1
             } else {
                 return -code error "Non-directory found in $path"
