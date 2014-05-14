@@ -209,7 +209,6 @@ proc find_teapot_package {teapot_url package_name {version "any"} {platform "tcl
 
 
 proc main {args} {
-    puts $args
     set first_arg [lindex $args 1]
 
     if {$first_arg != {}} {

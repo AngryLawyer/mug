@@ -46,6 +46,7 @@ namespace eval ::mug::git {
     }
 
     proc get_repo_tag {url} {
+        # From a Git URL, extract a tag or commit, if any
         set hash_pos [string last # $url]
         if {$hash_pos == -1} {
             return {}
@@ -63,10 +64,50 @@ namespace eval ::mug::git {
         }
     }
 
+    proc check_clean_repo {} {
+        # Has a given repo got any local changes that would be lost?
+        set result [exec git status --porcelain]
+        if {$result == {}} {
+            return 1
+        } else {
+            return 0
+        }
+    }
+
+    proc update_repo {repo_name repo_tag} {
+    }
+
+    proc validate_local_repo {repo_name repo_url} {
+        # a local repo
+    }
+
+    proc local_repo_exists {repo_name} {
+        # Check if we've got a local repo already
+        set path "mug_packages/$repo_name"
+        if {[file exists $path]} {
+            if {[file isdirectory $path]} {
+                set result [exec cd $path && git remote -v]
+                puts $result
+                puts [exec pwd]
+                return 1
+            } else {
+                return -code error "Non-directory found in $path"
+            }
+        }
+        return 0
+    }
+
     proc install {url} {
         if {![check_git_exists]} {
-            puts "I can't find git!"
-            return
+            return -code error "I can't find git!"
         }
+
+        set repo_name [get_repo_name $url]
+        set repo_tag [get_repo_tag $url]
+        set repo_url [get_repo_url $url]
+
+        if {[local_repo_exists $repo_name]} {
+        }
+
     }
 }
