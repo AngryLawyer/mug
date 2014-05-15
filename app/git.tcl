@@ -83,7 +83,7 @@ namespace eval ::mug::git {
     
     proc install_repo {repo_name repo_url} {
         # We're doing a fresh install of a repo
-        puts [exec -ignorestderr git clone $repo_url mug_packages/$repo_name]
+        [exec git clone -q $repo_url mug_packages/$repo_name]
     }
 
     proc local_repo_exists {repo_name} {
