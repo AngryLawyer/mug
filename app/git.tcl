@@ -80,6 +80,11 @@ namespace eval ::mug::git {
     proc validate_local_repo {repo_name repo_url} {
         # a local repo
     }
+    
+    proc install_repo {repo_name repo_url} {
+        # We're doing a fresh install of a repo
+        puts [exec -ignorestderr git clone $repo_url mug_packages/$repo_name]
+    }
 
     proc local_repo_exists {repo_name} {
         # Check if we've got a local repo already
@@ -106,6 +111,10 @@ namespace eval ::mug::git {
         set repo_url [get_repo_url $url]
 
         if {[local_repo_exists $repo_name]} {
+            # BAAAHG
+        } else {
+            install_repo $repo_name $repo_url
+            update_repo $repo_name $repo_tag
         }
 
     }

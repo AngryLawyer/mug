@@ -4,14 +4,14 @@ source [file join [file dirname [info script]] "git.tcl"]
 namespace eval ::mug::install {
     namespace export install install_directory
 
-    proc install {items} {
-        # Do we have any items?
-        if {[llength $items] > 0} {
-            foreach item $items {
-                install_item $item
+    proc ensure_mug_packages_directory {} {
+        set path [install_directory]
+        if {[file exists $path]} {
+            if {[file isdirectory $path] == 0} {
+                return -code error "Non-directory found in $path"
             }
         } else {
-            # Otherwise install from a file
+            file mkdir $path
         }
     }
 
@@ -26,4 +26,17 @@ namespace eval ::mug::install {
     proc install_directory {} {
         return "mug_packages"
     }
+
+    proc install {items} {
+        # Do we have any items?
+        if {[llength $items] > 0} {
+            ensure_mug_packages_directory
+            foreach item $items {
+                install_item $item
+            }
+        } else {
+            # Otherwise install from a file
+        }
+    }
+
 }
