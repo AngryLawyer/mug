@@ -1,5 +1,5 @@
 namespace eval ::mug::git {
-    namespace export is_git_url get_repo_name get_repo_url get_repo_tag install
+    namespace export is_git_url get_repo_name get_repo_url get_repo_tag install find_fetch_url
 
     proc is_git_url {url} {
         set VALID_PREFIXES {
@@ -83,7 +83,10 @@ namespace eval ::mug::git {
     
     proc install_repo {repo_name repo_url} {
         # We're doing a fresh install of a repo
-        [exec git clone -q $repo_url mug_packages/$repo_name]
+        exec git clone -q $repo_url mug_packages/$repo_name
+    }
+
+    proc find_fetch_url {remote_strings} {
     }
 
     proc local_repo_exists {repo_name} {

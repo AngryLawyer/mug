@@ -76,4 +76,23 @@ test get_repo_name {
     return [::mug::git::get_repo_name "git@github.com:AngryLawyer/mug.git"]
 } -result {mug}
 
+test find_fetch_url {
+    Should be able to pick our a fetch url from a single item
+} -body {
+    return [::mug::git::find_fetch_url "origin	https://github.com/AngryLawyer/mug.git (fetch)"]
+} -result {https://github.com/AngryLawyer/mug.git}
+
+test find_fetch_url {
+    Should be able to pick our a fetch url from a list of items
+} -body {
+    return [::mug::git::find_fetch_url {origin	https://github.com/AngryLawyer/mug.git (fetch)
+origin	https://github.com/AngryLawyer/mug.git (push)}]
+} -result {https://github.com/AngryLawyer/mug.git}
+
+test find_fetch_url {
+    Should give an empty result if we don't have the item
+} -body {
+    return [::mug::git::find_fetch_url "origin	https://github.com/AngryLawyer/mug.git (pull)"]
+} -result {}
+
 cleanupTests
