@@ -98,14 +98,21 @@ namespace eval ::mug::git {
         return {}
     }
 
-    proc local_repo_exists {repo_name} {
+    proc local_repo_exists {repo_name url} {
         # Check if we've got a local repo already
         set path "mug_packages/$repo_name"
         if {[file exists $path]} {
             if {[file isdirectory $path]} {
-                set result [exec git --git-dir=./$path/.git remote -v]
-                puts $result
-                return 1
+                set result [find_fetch_url [exec git --git-dir=./$path/.git remote -v]]
+                if {$result != {}} {
+                    if {$result == $url} {
+                        return 1
+                    } else {
+                        return -code error "An incorrect repo was found in $path - found $result expected $url"
+                    }
+                } else {
+                    return -code error "Unhappy directory found in $path"
+                }
             } else {
                 return -code error "Non-directory found in $path"
             }
@@ -122,7 +129,7 @@ namespace eval ::mug::git {
         set repo_tag [get_repo_tag $url]
         set repo_url [get_repo_url $url]
 
-        if {[local_repo_exists $repo_name]} {
+        if {[local_repo_exists $repo_name $repo_url]} {
             # BAAAHG
         } else {
             install_repo $repo_name $repo_url
