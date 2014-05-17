@@ -75,10 +75,9 @@ namespace eval ::mug::git {
     }
 
     proc update_repo {repo_name repo_tag} {
-    }
-
-    proc validate_local_repo {repo_name repo_url} {
-        # a local repo
+        set path "mug_packages/$repo_name"
+        #[exec git --git-dir=./$path/.git pull]
+        #[exec git --git-dir=./$path/.git checkout $repo_tag]
     }
     
     proc install_repo {repo_name repo_url} {
@@ -130,7 +129,7 @@ namespace eval ::mug::git {
         set repo_url [get_repo_url $url]
 
         if {[local_repo_exists $repo_name $repo_url]} {
-            # BAAAHG
+            update_repo $repo_name $repo_tag
         } else {
             install_repo $repo_name $repo_url
             update_repo $repo_name $repo_tag
