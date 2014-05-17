@@ -87,6 +87,15 @@ namespace eval ::mug::git {
     }
 
     proc find_fetch_url {remote_strings} {
+        # Given the results of git remote -v, find
+        # the url we're getting updates from
+        set records [split $remote_strings "\n"]
+        foreach record $records {
+            if {[lindex $record 2] == "(fetch)" && [lindex $record 0] == "origin"} {
+                return [lindex $record 1]
+            }
+        }
+        return {}
     }
 
     proc local_repo_exists {repo_name} {
