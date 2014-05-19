@@ -76,8 +76,12 @@ namespace eval ::mug::git {
 
     proc update_repo {repo_name repo_tag} {
         set path "mug_packages/$repo_name"
-        #[exec git --git-dir=./$path/.git pull]
-        #[exec git --git-dir=./$path/.git checkout $repo_tag]
+        exec git --git-dir=./$path/.git pull
+        if {$repo_tag != {}} {
+            exec git --git-dir=./$path/.git checkout $repo_tag
+        } else {
+            exec git --git-dir=./$path/.git checkout master
+        }
     }
     
     proc install_repo {repo_name repo_url} {
@@ -135,5 +139,10 @@ namespace eval ::mug::git {
             update_repo $repo_name $repo_tag
         }
 
+        if {$repo_tag != {}} {
+            return "$repo_name@$repo_tag mug_packages/$repo_name"
+        } else {
+            return "$repo_name mug_packages/$repo_name"
+        }
     }
 }

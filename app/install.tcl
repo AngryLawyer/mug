@@ -32,7 +32,7 @@ namespace eval ::mug::install {
         if {[llength $items] > 0} {
             ensure_mug_packages_directory
             foreach item $items {
-                install_item $item
+                puts [install_item $item]
             }
         } else {
             # Otherwise install from a file
