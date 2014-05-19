@@ -77,10 +77,17 @@ namespace eval ::mug::git {
     proc update_repo {repo_name repo_tag} {
         set path "mug_packages/$repo_name"
         exec git --git-dir=./$path/.git pull
+
+        set branch_name [exec git symbolic-ref -q --short HEAD]
+
         if {$repo_tag != {}} {
-            exec git --git-dir=./$path/.git checkout $repo_tag
+            if {$repo_tag != $branch_name} {
+                exec git --git-dir=./$path/.git checkout $repo_tag
+            }
         } else {
-            exec git --git-dir=./$path/.git checkout master
+            if {$branch_name != "master"} {
+                exec git --git-dir=./$path/.git checkout master
+            }
         }
     }
     
