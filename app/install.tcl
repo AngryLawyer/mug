@@ -36,7 +36,12 @@ namespace eval ::mug::install {
             }
         } else {
             # Otherwise install from a file
+            if {[file exists "mug-requirements.txt"]} {
+            } else {
+                #We have nothing to install
+            }
         }
     }
 
+    proc slurp_file
 }
