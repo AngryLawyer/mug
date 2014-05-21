@@ -4,6 +4,10 @@ package require http
 
 source [file join [file dirname [info script]] app/install.tcl]
 
+proc version {} {
+    return 0.0.1
+}
+
 proc map {lambdaExpression list} {
     set res {}
     foreach element $list {
@@ -216,7 +220,11 @@ proc main {args} {
             {install} { ::mug::install::install [lrange $args 2 end] } 
         }
     } else {
-        puts "Mug - a Tcl package manager"
+        puts "Mug - a Tcl package manager\n"
+        puts "Usage: $first_arg <command>\n"
+        puts "Where command is one of:"
+        puts "  install\n"
+        puts "mug@[version] [info script]"
     }
     #puts [match_version "3.1.4" [parse_version_pattern ">1"]]
     #provide_autoloader [pwd]

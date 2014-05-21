@@ -37,11 +37,24 @@ namespace eval ::mug::install {
         } else {
             # Otherwise install from a file
             if {[file exists "mug-requirements.txt"]} {
+                set items [split [slurp_file "mug-requirements.txt"] "\n"]
+                foreach item $items {
+                    set item [string trim $item]
+                    if {$item != {}} {
+                        puts [install_item $item]
+                    }
+                }
             } else {
                 #We have nothing to install
             }
         }
     }
 
-    proc slurp_file
+    # Read a given file and spit it out
+    proc slurp_file {name} {
+        set fp [open $name r]
+        set file_data [read $fp]
+        close $fp
+        return $file_data
+    }
 }
