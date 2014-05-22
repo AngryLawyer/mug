@@ -221,11 +221,12 @@ proc main {args} {
         }
     } else {
         puts "Mug - a Tcl package manager\n"
-        puts "Usage: $first_arg <command>\n"
+        puts "Usage: [lindex $args 0] <command>\n"
         puts "Where command is one of:"
         puts "  install\n"
         puts "mug@[version] [info script]"
     }
+
     #puts [match_version "3.1.4" [parse_version_pattern ">1"]]
     #provide_autoloader [pwd]
     #puts [find_teapot_package "http://teapot.activestate.com/" "base64" "2.4.2"]
