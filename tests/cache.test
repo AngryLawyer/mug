@@ -1,0 +1,13 @@
+package require tcltest
+namespace import ::tcltest::test
+namespace import ::tcltest::cleanupTests
+
+source ../app/cache.tcl
+
+test cache_directory_name {
+    Should be able to get a sensible cache directory from a name-tag-url set
+} -body {
+    return [::mug::cache::cache_directory_name aaa bbb http://cccc.com]
+} -result "aaa-bbb-http://cccc.com"
+
+cleanupTests
