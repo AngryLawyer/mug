@@ -11,6 +11,12 @@ test is_git_url {
 } -result {1}
 
 test is_git_url {
+    \"git@blah\" is a Git url
+} -body {
+    return [::mug::git::is_git_url "git@github.com:AngryLawyer/bw-tournament-organiser.git"]
+} -result {1}
+
+test is_git_url {
     \"git+http:\" is a Git url
 } -body {
     return [::mug::git::is_git_url "git+http://blahbla.com"]

@@ -3,18 +3,23 @@ namespace eval ::mug::git {
 
     proc is_git_url {url} {
         set VALID_PREFIXES {
-            "git:"
-            "git+http:"
-            "git+https:"
-            "git+rsync:"
-            "git+ftp:"
-            "git+ssh:"
+            {git:}
+            {git\+http:}
+            {git\+https:}
+            {git\+rsync:}
+            {git\+ftp:}
+            {git\+ssh:}
+            {git@[A-Za-z0-9_.+-]+:}
         }
 
         set prefix "[lindex [split $url ":"] 0]:"
-        if {[lsearch $VALID_PREFIXES $prefix] > -1} {
-            return 1
+
+        foreach {valid_prefix} $VALID_PREFIXES {
+            if {[regexp $valid_prefix $prefix] == 1} {
+                return 1
+            }
         }
+
         return 0
     }
 
@@ -139,12 +144,14 @@ namespace eval ::mug::git {
         set repo_tag [get_repo_tag $url]
         set repo_url [get_repo_url $url]
 
-        if {[local_repo_exists $repo_name $repo_url]} {
-            update_repo $repo_name $repo_tag
-        } else {
-            install_repo $repo_name $repo_url
-            update_repo $repo_name $repo_tag
-        }
+        set cache_directory [::git::cache::cache_directory_path $repo_name $repo_tag $repo_url]
+
+        #if {[local_repo_exists $repo_name $repo_url]} {
+        #    update_repo $repo_name $repo_tag
+        #} else {
+        #    install_repo $repo_name $repo_url
+        #    update_repo $repo_name $repo_tag
+        #}
 
         if {$repo_tag != {}} {
             return "$repo_name@$repo_tag mug_packages/$repo_name"
