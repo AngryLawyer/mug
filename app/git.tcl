@@ -1,4 +1,5 @@
 source [file join [file dirname [info script]] "cache.tcl"]
+source [file join [file dirname [info script]] "utils.tcl"]
 
 namespace eval ::mug::git {
     namespace export is_git_url get_repo_name get_repo_url get_repo_tag install find_fetch_url
@@ -111,6 +112,7 @@ namespace eval ::mug::git {
         file copy $cache_directory ./mug_packages/$repo_name
         # Remove copied git directory
         file delete -force ./mug_packages/$repo_name/.git 
+        ::mug::utils::set_installed_package_details ./mug_packages/$repo_name $repo_name-$repo_tag-$repo_url
         ::mug::cache::clean_cache $cache_directory
     }
 
@@ -139,6 +141,15 @@ namespace eval ::mug::git {
         return 0
     }
 
+    # We've got a repo directory - is it the same as the current?
+    proc is_current_repo {repo_name repo_tag repo_url} {
+        set repo_details [::mug::utils::get_installed_package_details "mug_packages/$repo_name"]
+        if {$repo_details != "$repo_name-$repo_tag-$repo_url\n"} {
+            return 0
+        }
+        return 1
+    }
+
     proc install {url} {
         if {![check_git_exists]} {
             return -code error "I can't find git!"
@@ -151,7 +162,9 @@ namespace eval ::mug::git {
         set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
 
         if {[local_repo_exists $repo_name]} {
-            return -code error "Not yet implemented"
+            if {[is_current_repo $repo_name $repo_tag $repo_url] != 1} {
+                return -code error "Not yet implemented"
+            }
         } else {
             install_repo $repo_name $repo_url $cache_directory $repo_tag
         }
