@@ -108,7 +108,9 @@ namespace eval ::mug::git {
             exec git --git-dir=$cache_directory/.git checkout $repo_tag
         }
         # Copy copy copy
-        # TODO
+        file copy $cache_directory ./mug_packages/$repo_name
+        # Remove copied git directory
+        file delete -force ./mug_packages/$repo_name/.git 
         ::mug::cache::clean_cache $cache_directory
     }
 
