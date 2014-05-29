@@ -1,3 +1,5 @@
+source [file join [file dirname [info script]] "cache.tcl"]
+
 namespace eval ::mug::git {
     namespace export is_git_url get_repo_name get_repo_url get_repo_tag install find_fetch_url
 
@@ -144,7 +146,7 @@ namespace eval ::mug::git {
         set repo_tag [get_repo_tag $url]
         set repo_url [get_repo_url $url]
 
-        set cache_directory [::git::cache::cache_directory_path $repo_name $repo_tag $repo_url]
+        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag $repo_url]
 
         #if {[local_repo_exists $repo_name $repo_url]} {
         #    update_repo $repo_name $repo_tag
