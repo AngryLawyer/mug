@@ -98,9 +98,18 @@ namespace eval ::mug::git {
         }
     }
     
-    proc install_repo {repo_name repo_url} {
+    proc install_repo {repo_name repo_url cache_directory repo_tag} {
         # We're doing a fresh install of a repo
-        exec git clone -q $repo_url mug_packages/$repo_name
+        ::mug::cache::clean_cache $cache_directory
+        ::mug::cache::ensure_cache $cache_directory
+        exec git clone -q $repo_url $cache_directory
+        # Switch branches etc
+        if {$repo_tag != {}} {
+            exec git --git-dir=$cache_directory/.git checkout $repo_tag
+        }
+        # Copy copy copy
+        # TODO
+        ::mug::cache::clean_cache $cache_directory
     }
 
     proc find_fetch_url {remote_strings} {
@@ -115,21 +124,12 @@ namespace eval ::mug::git {
         return {}
     }
 
-    proc local_repo_exists {repo_name url} {
+    proc local_repo_exists {repo_name} {
         # Check if we've got a local repo already
         set path "mug_packages/$repo_name"
         if {[file exists $path]} {
             if {[file isdirectory $path]} {
-                set result [find_fetch_url [exec git --git-dir=./$path/.git remote -v]]
-                if {$result != {}} {
-                    if {$result == $url} {
-                        return 1
-                    } else {
-                        return -code error "An incorrect repo was found in $path - found $result expected $url"
-                    }
-                } else {
-                    return -code error "Unhappy directory found in $path"
-                }
+                return 1
             } else {
                 return -code error "Non-directory found in $path"
             }
@@ -146,14 +146,13 @@ namespace eval ::mug::git {
         set repo_tag [get_repo_tag $url]
         set repo_url [get_repo_url $url]
 
-        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag $repo_url]
+        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
 
-        #if {[local_repo_exists $repo_name $repo_url]} {
-        #    update_repo $repo_name $repo_tag
-        #} else {
-        #    install_repo $repo_name $repo_url
-        #    update_repo $repo_name $repo_tag
-        #}
+        if {[local_repo_exists $repo_name]} {
+            return -code error "Not yet implemented"
+        } else {
+            install_repo $repo_name $repo_url $cache_directory $repo_tag
+        }
 
         if {$repo_tag != {}} {
             return "$repo_name@$repo_tag mug_packages/$repo_name"

@@ -5,9 +5,15 @@ namespace import ::tcltest::cleanupTests
 source ../app/cache.tcl
 
 test cache_directory_name {
-    Should be able to get a sensible cache directory from a name-tag-url set
+    Should be able to get a sensible cache directory from a name-tag
 } -body {
-    return [::mug::cache::cache_directory_name aaa bbb http://cccc.com]
-} -result "aaa-bbb-http://cccc.com"
+    return [::mug::cache::cache_directory_name aaa bbb]
+} -result "aaa-bbb"
+
+test cache_directory_name {
+    Should be able to get a sensible cache directory from a name and empty tag
+} -body {
+    return [::mug::cache::cache_directory_name aaa {}]
+} -result "aaa"
 
 cleanupTests
