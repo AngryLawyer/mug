@@ -106,7 +106,7 @@ namespace eval ::mug::git {
         exec git clone -q $repo_url $cache_directory
         # Switch branches etc
         if {$repo_tag != {}} {
-            exec git --git-dir=$cache_directory/.git checkout $repo_tag
+            exec git --work-tree=$cache_directory --git-dir=$cache_directory/.git checkout -q $repo_tag -- .
         }
         # Copy copy copy
         file copy $cache_directory ./mug_packages/$repo_name
