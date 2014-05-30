@@ -163,7 +163,9 @@ namespace eval ::mug::git {
 
         if {[local_repo_exists $repo_name]} {
             if {[is_current_repo $repo_name $repo_tag $repo_url] != 1} {
-                return -code error "Not yet implemented"
+                # Remove the repo already there
+                file delete -force ./mug_packages/$repo_name
+                install_repo $repo_name $repo_url $cache_directory $repo_tag
             }
         } else {
             install_repo $repo_name $repo_url $cache_directory $repo_tag
