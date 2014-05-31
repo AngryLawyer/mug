@@ -19,7 +19,7 @@ namespace eval ::mug::install {
         if {[::mug::git::is_git_url $item] == 1} {
             ::mug::git::install $item
         } else {
-            puts "$item is not a Git repo"
+            ::mug::teapot::install $item
         }
     }
 

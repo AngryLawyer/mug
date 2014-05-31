@@ -37,5 +37,12 @@ namespace eval ::mug::teapot {
         return [pick_newest $named_packages]
     }
 
+    proc install {package_description} {
+
+        set package_name [get_package_name $package_description]
+        set package_version [get_package_version $package_description]
+
+        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
+    }
 
 }
