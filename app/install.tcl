@@ -1,6 +1,3 @@
-#FIXME: Abstract this away
-source [file join [file dirname [info script]] "git.tcl"]
-
 namespace eval ::mug::install {
     namespace export install install_directory
 

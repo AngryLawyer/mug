@@ -2,7 +2,7 @@ package require tcltest
 namespace import ::tcltest::test
 namespace import ::tcltest::cleanupTests
 
-source ../app/cache.tcl
+source ../app/mug.tcl
 
 test cache_directory_name {
     Should be able to get a sensible cache directory from a name-tag

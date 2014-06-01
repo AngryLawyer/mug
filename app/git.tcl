@@ -1,6 +1,3 @@
-source [file join [file dirname [info script]] "cache.tcl"]
-source [file join [file dirname [info script]] "utils.tcl"]
-
 namespace eval ::mug::git {
     namespace export is_git_url get_repo_name get_repo_url get_repo_tag install find_fetch_url
 

@@ -2,7 +2,7 @@ package require tcltest
 namespace import ::tcltest::test
 namespace import ::tcltest::cleanupTests
 
-source ../app/git.tcl
+source ../app/mug.tcl
 
 test is_git_url {
     \"git:\" is a Git url

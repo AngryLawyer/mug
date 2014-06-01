@@ -2,7 +2,7 @@ package require tcltest
 namespace import ::tcltest::test
 namespace import ::tcltest::cleanupTests
 
-source ../app/platform.tcl
+source ../app/mug.tcl
 
 test get_arch {
     \"Darwin\" should give us back "macosx"

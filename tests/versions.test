@@ -2,7 +2,7 @@ package require tcltest
 namespace import ::tcltest::test
 namespace import ::tcltest::cleanupTests
 
-source ../app/versions.tcl
+source ../app/mug.tcl
 
 test parse_version_pattern {
     \"Any\" should be a valid choice

@@ -2,7 +2,7 @@
 
 package require http
 
-source [file join [file dirname [info script]] app/install.tcl]
+source [file join [file dirname [info script]] app/mug.tcl]
 
 proc version {} {
     return 0.0.1
