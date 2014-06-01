@@ -4,4 +4,22 @@ namespace import ::tcltest::cleanupTests
 
 source ../app/mug.tcl
 
+test extract_teapot_string {
+    Should be able to extract a list of items from a wad of text
+} -body {
+    return [::mug::teapot::extract_teapot_string {<body><!-- [[TPM[[first second third]]MPT]]--></body>}]
+} -result {first second third}
+
+test extract_teapot_string {
+    Should get an empty string if no teapot data exists 
+} -body {
+    return [::mug::teapot::extract_teapot_string "<body><!-- --></body>"]
+} -result {}
+
+test extract_teapot_string {
+    Should ignore malformed strings 
+} -body {
+    return [::mug::teapot::extract_teapot_string {<body><!-- [[TPM[[ waaat --></body>}]
+} -result {}
+
 cleanupTests
