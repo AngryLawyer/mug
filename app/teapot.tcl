@@ -37,12 +37,28 @@ namespace eval ::mug::teapot {
         return [pick_newest $named_packages]
     }
 
-    proc install {package_description} {
-
-        set package_name [get_package_name $package_description]
-        set package_version [get_package_version $package_description]
-
-        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
+    proc get_repo_name {repo_description} {
+        return [lindex [split $repo_description @] 0]
     }
 
+    proc get_repo_version {repo_description} {
+        return [lindex [split $repo_description @] 1]
+    }
+
+    proc install {package_description} {
+
+        set repo_name [get_repo_name $package_description]
+        set repo_version [get_repo_version $package_description]
+
+        set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
+
+        ::mug::install::clean_repo $repo_name $repo_tag teapot 
+        install_repo $repo_name $repo_url $cache_directory $repo_tag
+
+        if {$repo_tag != {}} {
+            return "$repo_name@$repo_tag mug_packages/$repo_name"
+        } else {
+            return "$repo_name mug_packages/$repo_name"
+        }
+    }
 }

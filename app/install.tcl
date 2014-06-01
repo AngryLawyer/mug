@@ -1,6 +1,28 @@
 namespace eval ::mug::install {
     namespace export install install_directory
 
+    proc local_repo_exists {repo_name} {
+        # Check if we've got a local repo already
+        set path "mug_packages/$repo_name"
+        if {[file exists $path]} {
+            if {[file isdirectory $path]} {
+                return 1
+            } else {
+                return -code error "Non-directory found in $path"
+            }
+        }
+        return 0
+    }
+
+    # We've got a repo directory - is it the same as the current?
+    proc is_current_repo {repo_name repo_tag repo_url} {
+        set repo_details [::mug::utils::get_installed_package_details "mug_packages/$repo_name"]
+        if {$repo_details != "$repo_name-$repo_tag-$repo_url\n"} {
+            return 0
+        }
+        return 1
+    }
+
     proc ensure_mug_packages_directory {} {
         set path [install_directory]
         if {[file exists $path]} {
@@ -22,6 +44,15 @@ namespace eval ::mug::install {
 
     proc install_directory {} {
         return "mug_packages"
+    }
+
+    proc clean_repo {repo_name repo_tag repo_url} {
+        if {[local_repo_exists $repo_name]} {
+            if {[is_current_repo $repo_name $repo_tag $repo_url] != 1} {
+                # Remove the repo already there
+                file delete -force ./mug_packages/$repo_name
+            }
+        } 
     }
 
     proc install {items} {

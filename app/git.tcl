@@ -125,28 +125,6 @@ namespace eval ::mug::git {
         return {}
     }
 
-    proc local_repo_exists {repo_name} {
-        # Check if we've got a local repo already
-        set path "mug_packages/$repo_name"
-        if {[file exists $path]} {
-            if {[file isdirectory $path]} {
-                return 1
-            } else {
-                return -code error "Non-directory found in $path"
-            }
-        }
-        return 0
-    }
-
-    # We've got a repo directory - is it the same as the current?
-    proc is_current_repo {repo_name repo_tag repo_url} {
-        set repo_details [::mug::utils::get_installed_package_details "mug_packages/$repo_name"]
-        if {$repo_details != "$repo_name-$repo_tag-$repo_url\n"} {
-            return 0
-        }
-        return 1
-    }
-
     proc install {url} {
         if {![check_git_exists]} {
             return -code error "I can't find git!"
@@ -158,15 +136,8 @@ namespace eval ::mug::git {
 
         set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
 
-        if {[local_repo_exists $repo_name]} {
-            if {[is_current_repo $repo_name $repo_tag $repo_url] != 1} {
-                # Remove the repo already there
-                file delete -force ./mug_packages/$repo_name
-                install_repo $repo_name $repo_url $cache_directory $repo_tag
-            }
-        } else {
-            install_repo $repo_name $repo_url $cache_directory $repo_tag
-        }
+        ::mug::install::clean_repo $repo_name $repo_tag $repo_url
+        install_repo $repo_name $repo_url $cache_directory $repo_tag
 
         if {$repo_tag != {}} {
             return "$repo_name@$repo_tag mug_packages/$repo_name"
