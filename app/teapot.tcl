@@ -45,6 +45,20 @@ namespace eval ::mug::teapot {
         return [lindex [split $repo_description @] 1]
     }
 
+    proc install_repo {repo_name cache_directory repo_tag} {
+        # We're doing a fresh install of a repo
+        ::mug::cache::clean_cache $cache_directory
+        ::mug::cache::ensure_cache $cache_directory
+
+        # TODO: Do the install
+        # Copy copy copy
+        file copy $cache_directory ./mug_packages/$repo_name
+        # Remove copied git directory
+        file delete -force ./mug_packages/$repo_name/.git 
+        ::mug::utils::set_installed_package_details ./mug_packages/$repo_name $repo_name-$repo_tag-$repo_url
+        ::mug::cache::clean_cache $cache_directory
+    }
+
     proc install {package_description} {
 
         set repo_name [get_repo_name $package_description]
@@ -52,8 +66,10 @@ namespace eval ::mug::teapot {
 
         set cache_directory [::mug::cache::cache_directory_path $repo_name $repo_tag]
 
+        # Try and find the repo first
+
         ::mug::install::clean_repo $repo_name $repo_tag teapot 
-        install_repo $repo_name $repo_url $cache_directory $repo_tag
+        install_repo $repo_name $cache_directory $repo_tag
 
         if {$repo_tag != {}} {
             return "$repo_name@$repo_tag mug_packages/$repo_name"
