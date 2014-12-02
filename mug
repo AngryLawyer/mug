@@ -14,12 +14,14 @@ proc main {args} {
     if {$first_arg != {}} {
         switch $first_arg {
             {install} { ::mug::install::install [lrange $args 2 end] } 
+            {init} { ::mug::autoloader::provide_autoloader [pwd] }
         }
     } else {
         puts "Mug - a Tcl package manager\n"
         puts "Usage: [lindex $args 0] <command>\n"
         puts "Where command is one of:"
         puts "  install\n"
+        puts "  init\n"
         puts "mug@[version] [info script]"
     }
 
