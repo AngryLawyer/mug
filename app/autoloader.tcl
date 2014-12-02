@@ -7,11 +7,14 @@ namespace eval ::mug::autoloader {
 
         file mkdir $mug_path
 
+        # List all subdirectories in the mug path
+        set packages [glob -directory $mug_path -type d *]
+
         set first {set ::auto_path [linsert $::auto_path 0 }
         set last {]}
 
         set file_id [open $destination "w"]
-        puts $file_id $first$mug_path$last
+        puts $file_id $first$packages$last
         close $file_id
     }
 
