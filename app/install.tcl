@@ -35,10 +35,13 @@ namespace eval ::mug::install {
     }
 
     proc install_item {item} {
+        # TODO: This should probably do something more elegant than blitzing the auto_include
         if {[::mug::git::is_git_url $item] == 1} {
             ::mug::git::install $item
+            ::mug::autoloader::provide_autoloader [pwd]
         } else {
             ::mug::teapot::install $item
+            ::mug::autoloader::provide_autoloader [pwd]
         }
     }
 
@@ -64,8 +67,8 @@ namespace eval ::mug::install {
             }
         } else {
             # Otherwise install from a file
-            if {[file exists "mug-requirements.txt"]} {
-                set items [split [::mug::utils::slurp_file "mug-requirements.txt"] "\n"]
+            if {[file exists "mug_requirements.txt"]} {
+                set items [split [::mug::utils::slurp_file "mug_requirements.txt"] "\n"]
                 foreach item $items {
                     set item [string trim $item]
                     if {$item != {}} {

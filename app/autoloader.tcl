@@ -22,4 +22,7 @@ namespace eval ::mug::autoloader {
         close $file_id
     }
 
+    # Make sure that the autoloader has our most recently installed package
+    proc update_autoloader {path item} {
+    }
 }
