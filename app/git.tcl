@@ -96,16 +96,17 @@ namespace eval ::mug::git {
         }
     }
     
-    proc install_repo {repo_name repo_url cache_directory repo_tag} {
+    proc install_rep {repo_name repo_url cache_directory repo_tag} {
         # We're doing a fresh install of a repo
         ::mug::cache::clean_cache $cache_directory
         ::mug::cache::ensure_cache $cache_directory
         exec git clone -q $repo_url $cache_directory
         # Switch branches etc
         if {$repo_tag != {}} {
-            exec git --work-tree=$cache_directory --git-dir=$cache_directory/.git checkout -q $repo_tag -- .
+            exec git --work-tree=$cache_directory --git-dir=$cache_directory/.git checkout -q origin/$repo_tag -- .
         }
-        # Copy copy copy
+        # Delete the paste target, if it exists
+        file delete -force -- ./mug_packages/$repo_name
         file copy $cache_directory ./mug_packages/$repo_name
         # Remove copied git directory
         file delete -force ./mug_packages/$repo_name/.git 
