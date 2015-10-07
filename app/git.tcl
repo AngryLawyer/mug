@@ -96,7 +96,7 @@ namespace eval ::mug::git {
         }
     }
     
-    proc install_rep {repo_name repo_url cache_directory repo_tag} {
+    proc install_repo {repo_name repo_url cache_directory repo_tag} {
         # We're doing a fresh install of a repo
         ::mug::cache::clean_cache $cache_directory
         ::mug::cache::ensure_cache $cache_directory
